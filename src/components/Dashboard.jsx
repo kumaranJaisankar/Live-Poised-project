@@ -142,14 +142,14 @@ const Dashboard = ({ onPageChange }) => {
   ];
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900/50 min-h-screen">
+    <div className="p-4 sm:p-5 lg:p-6 bg-gray-50 dark:bg-gray-900/50 min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-6">
             {/* Welcome Section */}
-            <div className="mb-8">
+            <div className="mb-6">
               <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
                 Welcome back, Kumara!
               </h1>
@@ -159,7 +159,7 @@ const Dashboard = ({ onPageChange }) => {
             </div>
             <SearchCard />
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
               <StatCard
                 icon={Users}
                 label="Active Mentees"
@@ -187,8 +187,8 @@ const Dashboard = ({ onPageChange }) => {
             </div>
 
             {/* My Mentees */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm">
-              <div className="flex items-center justify-between mb-4">
+            <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm">
+              <div className="flex items-center justify-between mb-3">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   My Mentees
                 </h2>
@@ -196,11 +196,11 @@ const Dashboard = ({ onPageChange }) => {
                   View All <ArrowRight size={14} />
                 </button>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-1">
                 {mentors.map((mentor) => (
                   <div
                     key={mentor.id}
-                    className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200"
+                    className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200"
                   >
                     <img
                       src={mentor.avatar}
@@ -224,8 +224,8 @@ const Dashboard = ({ onPageChange }) => {
             </div>
 
             {/* Recent Forum Posts */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm">
-              <div className="flex items-center justify-between mb-4">
+            <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm">
+              <div className="flex items-center justify-between mb-3">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Recent Forum Activity
                 </h2>
@@ -239,12 +239,12 @@ const Dashboard = ({ onPageChange }) => {
               </div>
 
               {/* Filter Tabs */}
-              <div className="flex border-b border-gray-200 dark:border-gray-700 mb-4">
+              <div className="flex border-b border-gray-200 dark:border-gray-700 mb-3">
                 {filterTabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveFilter(tab.id)}
-                    className={`px-4 py-2 text-sm font-medium transition-colors duration-200 -mb-px border-b-2 ${
+                    className={`px-3 py-2 text-sm font-medium transition-colors duration-200 -mb-px border-b-2 ${
                       activeFilter === tab.id
                         ? "border-teal-500 text-teal-600 dark:text-teal-400"
                         : "border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
@@ -255,11 +255,11 @@ const Dashboard = ({ onPageChange }) => {
                 ))}
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {recentForumPosts.map((post) => (
                   <div
                     key={post.id}
-                    className="p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200 cursor-pointer"
+                    className="p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200 cursor-pointer"
                   >
                     <h3 className="font-semibold text-gray-800 dark:text-white mb-1">
                       {post.title}
@@ -297,13 +297,13 @@ const Dashboard = ({ onPageChange }) => {
           </div>
 
           {/* Right Column */}
-          <div className="space-y-8">
+          <div className="space-y-6">
             {/* Quick Actions */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
                 Quick Actions
               </h2>
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <QuickActionButton
                   icon={MessageSquare}
                   text="Start New Discussion"
@@ -316,14 +316,14 @@ const Dashboard = ({ onPageChange }) => {
             <NewsFeed />
 
             {/* Progress Tracker */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm">
-              <div className="flex items-center gap-3 mb-4">
+            <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm">
+              <div className="flex items-center gap-3 mb-3">
                 <Target size={20} className="text-teal-500" />
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Progress Tracker
                 </h2>
               </div>
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <p className="text-sm text-gray-600 dark:text-gray-300">
                   You've completed <strong>8 of 10</strong> recovery milestones.
                 </p>
@@ -335,68 +335,6 @@ const Dashboard = ({ onPageChange }) => {
                 </div>
               </div>
             </div>
-
-            {/* Notifications */}
-            {/* <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Notifications
-                </h2>
-                <button className="text-teal-600 dark:text-teal-400 hover:underline text-sm font-medium">
-                  Mark All Read
-                </button>
-              </div>
-              <div className="space-y-3">
-                {notifications.slice(0, 2).map((notification) => (
-                  <div
-                    key={notification.id}
-                    className={`flex items-start gap-3 p-3 rounded-lg ${
-                      notification.unread
-                        ? "bg-teal-50/50 dark:bg-teal-900/20"
-                        : ""
-                    }`}
-                  >
-                    <div
-                      className={`w-2 h-2 rounded-full mt-1.5 ${
-                        notification.unread ? "bg-teal-500" : "bg-gray-300"
-                      }`}
-                    ></div>
-                    <div className="flex-1">
-                      <p className="text-sm text-gray-800 dark:text-gray-200">
-                        {notification.content}
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        {notification.time}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div> */}
-            {/* Quick Actions */}
-            {/* <div className="bg-gradient-to-br from-teal-500 to-cyan-600 p-6 rounded-2xl text-white">
-              <h2 className="text-xl font-bold mb-4">Quick Actions</h2>
-              <div className="space-y-3">
-                <button className="w-full p-3 bg-white/20 hover:bg-white/30 rounded-xl text-left transition-all duration-200">
-                  <div className="flex items-center gap-3">
-                    <MessageSquare size={20} />
-                    <span className="font-medium">Start New Discussion</span>
-                  </div>
-                </button>
-                <button className="w-full p-3 bg-white/20 hover:bg-white/30 rounded-xl text-left transition-all duration-200">
-                  <div className="flex items-center gap-3">
-                    <Users size={20} />
-                    <span className="font-medium">Find New Mentees</span>
-                  </div>
-                </button>
-                <button className="w-full p-3 bg-white/20 hover:bg-white/30 rounded-xl text-left transition-all duration-200">
-                  <div className="flex items-center gap-3">
-                    <Calendar size={20} />
-                    <span className="font-medium">Schedule Session</span>
-                  </div>
-                </button>
-              </div>
-            </div> */}
           </div>
         </div>
       </div>
