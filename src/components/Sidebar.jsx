@@ -14,14 +14,16 @@ import {
   Sun,
   Moon,
 } from "lucide-react";
+import { useTheme } from "next-themes";
 import useThemeStore from "../utils/themeStore";
 import { useAuth } from "@/hooks/useAuth";
 
 const Sidebar = ({ currentPage, onPageChange }) => {
-  const { sidebarCollapsed, toggleSidebar, theme, toggleTheme } =
-    useThemeStore();
+  const { sidebarCollapsed, toggleSidebar } = useThemeStore();
+  const { theme, setTheme } = useTheme();
   const auth = useAuth();
   const isAuthenticated = typeof window !== "undefined" && auth.isAuthenticated;
+  console.log("Sidebar Rendered - Theme:", theme);
 
   const navigationItems = [
     { id: "dashboard", icon: Home, label: "Dashboard" },
@@ -158,21 +160,41 @@ const Sidebar = ({ currentPage, onPageChange }) => {
 
       {/* Theme Toggle */}
       <div className="p-3 border-t border-teal-100 dark:border-gray-800">
-        <button
-          onClick={toggleTheme}
-          className="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-teal-50 dark:hover:bg-gray-800 hover:text-teal-600 dark:hover:text-teal-400 transition-all duration-200"
-        >
-          {theme === "light" ? (
-            <Moon size={18} className="flex-shrink-0" />
-          ) : (
-            <Sun size={18} className="flex-shrink-0" />
-          )}
-          {!sidebarCollapsed && (
-            <span className="font-medium text-sm font-inter">
-              {theme === "light" ? "Dark Mode" : "Light Mode"}
-            </span>
-          )}
-        </button>
+        <div className="relative">
+          <div className="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-xl text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
+            {theme === "light" ? (
+              <Sun size={18} className="flex-shrink-0" />
+            ) : (
+              <Moon size={18} className="flex-shrink-0" />
+            )}
+            {!sidebarCollapsed && (
+              <select
+                value={theme}
+                onChange={(e) => setTheme(e.target.value)}
+                className="w-full bg-transparent outline-none font-medium text-sm font-inter appearance-none"
+              >
+                <option
+                  value="light"
+                  className="font-medium bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+                >
+                  Light
+                </option>
+                <option
+                  value="dark"
+                  className="font-medium bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+                >
+                  Dark
+                </option>
+                <option
+                  value="system"
+                  className="font-medium bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+                >
+                  System
+                </option>
+              </select>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Logout Button */}

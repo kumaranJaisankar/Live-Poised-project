@@ -16,11 +16,21 @@ import {
   Shield,
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
+import { getUserById } from "../services/userServices";
 
 const Profile = () => {
   const auth = useAuth();
   const userDetails = auth.user;
   const [activeTab, setActiveTab] = useState("overview");
+
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["user", "userId"],
+    queryFn: () => getUserById("userId"),
+  });
+
+  console.log("User Profile Data:", data);
+  console.log("error:", error);
 
   const profileData = {
     name: userDetails ? userDetails?.name : "Sarah Johnson",

@@ -27,9 +27,12 @@ export default function RootLayout({ children }) {
             </div>
           }
         >
-          <ClientLayout>
+          {/* <ClientLayout>
             <AppProvider>{children}</AppProvider>
-          </ClientLayout>
+          </ClientLayout> */}
+          <KeycloakProvider>
+            <AppProvider>{children}</AppProvider>
+          </KeycloakProvider>
         </Suspense>
       </body>
     </html>

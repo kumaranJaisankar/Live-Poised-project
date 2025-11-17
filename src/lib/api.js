@@ -2,7 +2,7 @@ import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
 
 const api = axios.create({
-  baseURL: "https://localhost:8000",
+  baseURL: process.env.NEXT_SPRING_API_BASE_URL || "http://localhost:8000",
   withCredentials: true,
 });
 

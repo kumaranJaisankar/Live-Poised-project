@@ -21,13 +21,15 @@ export default function HealConnectApp() {
     queryKey: ["user", "userId"],
     queryFn: () => loginUser("email", "passwork"),
   });
+
+  console.log("User Profile Data:", data);
   // console.log("User Profile Data:", error);
   // if (isLoading) return <p>Loading profile...</p>;
   // if (isError) return <p>Failed to load user profile</p>;
 
   // Initialize theme on component mount
   useEffect(() => {
-    loginUser("email", "password");
+    // loginUser("email", "password");
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
     } else {

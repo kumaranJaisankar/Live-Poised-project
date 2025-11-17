@@ -142,7 +142,7 @@ const Dashboard = ({ onPageChange }) => {
   ];
 
   return (
-    <div className="p-4 sm:p-5 lg:p-6 bg-gray-50 dark:bg-gray-900/50 min-h-screen">
+    <div className="p-4 sm:p-5 lg:p-6  min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
