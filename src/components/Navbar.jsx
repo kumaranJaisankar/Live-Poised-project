@@ -3,6 +3,7 @@ import { Search, Bell, Sun, Moon, Menu, X } from "lucide-react";
 import useThemeStore from "../utils/themeStore";
 import { useTheme } from "next-themes";
 import { useAuth } from "../hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
 
 const Navbar = ({ onMobileMenuToggle, mobileMenuOpen }) => {
   const { theme, setTheme } = useTheme();
@@ -11,6 +12,11 @@ const Navbar = ({ onMobileMenuToggle, mobileMenuOpen }) => {
   // const { theme, toggleTheme } = useThemeStore();
   const [searchQuery, setSearchQuery] = useState("");
 
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["user", userDetails?.preferred_username],
+    queryFn: () => getUserByName(userDetails?.preferred_username),
+  });
+  console.log("Data", data)
   return (
     <div className="bg-white dark:bg-[#1a1a1a] border-b border-teal-100 dark:border-gray-800 px-6 py-4 flex items-center justify-between sticky top-0 z-30">
       {/* Mobile Menu Toggle */}
@@ -65,7 +71,7 @@ const Navbar = ({ onMobileMenuToggle, mobileMenuOpen }) => {
             <p className="text-sm font-medium text-gray-900 dark:text-white">
               {userDetails?.name}
             </p>
-            <p className="text-xs text-teal-600 dark:text-teal-400">Mentor</p>
+            <p className="text-xs text-teal-600 dark:text-teal-400"> {data?.userProfile?.userType || "Mentee"}</p>
           </div>
         </div>
       </div>

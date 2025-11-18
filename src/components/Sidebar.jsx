@@ -17,14 +17,28 @@ import {
 import { useTheme } from "next-themes";
 import useThemeStore from "../utils/themeStore";
 import { useAuth } from "@/hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 
 const Sidebar = ({ currentPage, onPageChange }) => {
   const { sidebarCollapsed, toggleSidebar } = useThemeStore();
   const { theme, setTheme } = useTheme();
   const auth = useAuth();
+  const userDetails = auth.user;
   const isAuthenticated = typeof window !== "undefined" && auth.isAuthenticated;
   console.log("Sidebar Rendered - Theme:", theme);
+  console.log("User Details:", userDetails?.preferred_username);
 
+  const { data, isLoading, isError, error, refetch } = useQuery({
+    queryKey: ["user", userDetails?.preferred_username],
+    queryFn: () => getUserByName(userDetails?.preferred_username),
+  });
+
+  useEffect(() => {
+      if (userDetails?.preferred_username) {
+        refetch();
+      }
+    }, [userDetails?.preferred_username]);
   const navigationItems = [
     { id: "dashboard", icon: Home, label: "Dashboard" },
     { id: "forum", icon: MessageSquare, label: "Forum" },
@@ -34,6 +48,23 @@ const Sidebar = ({ currentPage, onPageChange }) => {
     // { id: "settings", icon: Settings, label: "Settings" },
   ];
 
+
+  function formatDateTimeMMDDYYYY(isoDateStr) {
+    const date = new Date(isoDateStr);
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    return `${month}-${day}-${year} ${hours}:${minutes}:${seconds}`;
+  }
+
+  const formattedDate = formatDateTimeMMDDYYYY(data?.loginDetails?.lastLoggedInAt || data?.lastLoggedInAt || "2025-06-10T10:00:00");
+
+  console.log("Formatted Login Date:", formattedDate);
+  console.log("User Profile Data from side bar component:", data);
   return (
     <div
       className={`${sidebarCollapsed ? "w-20" : "w-72"} transition-all duration-300 bg-white dark:bg-[#1a1a1a] border-r border-teal-100 dark:border-gray-800 flex flex-col h-screen fixed left-0 top-0 z-40`}
@@ -90,11 +121,12 @@ const Sidebar = ({ currentPage, onPageChange }) => {
                   {auth.user.name}
                 </p>
                 <p className="text-[11px] text-teal-500 dark:text-teal-600 truncate">
-                  Mentor
+                  {data?.userProfile?.userType || data?.userType}
                 </p>
 
                 <p className="text-[10px] text-gray-500 dark:text-gray-400 truncate">
-                  Last Login: 2025-06-10 10:00 AM
+                  
+                  Last Login: { formattedDate || "2025-06-10 10:00 AM"}
                 </p>
               </div>
             )}

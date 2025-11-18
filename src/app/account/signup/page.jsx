@@ -15,11 +15,18 @@ export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formError, setFormError] = useState(null);
+  const [userType, setUserType] = useState("Mentee");
+  const [successMessage, setSuccessMessage] = useState(null);
 
   const mutation = useMutation({
     mutationFn: createUser,
     onSuccess: (data) => {
       console.log("User created successfully", data);
+      setSuccessMessage("Registration successful! Redirecting to login...");
+      setFormError(null);
+      setTimeout(() => {
+        navigate("/account/signin?signup=success");
+      }, 2000); // Redirect after 2 seconds
       // navigate("/account/signin?signup=success");
     },
     onError: (error) => {
@@ -32,7 +39,7 @@ export default function SignUpPage() {
     setFormError(null);
 
     // Front-end validation
-    if (!name || !email || !phone || !password || !confirmPassword) {
+    if (!name || !email || !phone || !password || !confirmPassword || !userType) {
       setFormError("Please fill in all fields");
       return;
     }
@@ -46,14 +53,14 @@ export default function SignUpPage() {
     }
 
     // Execute the mutation
-    mutation.mutate({ name, email, phone, password });
+    mutation.mutate({ name, email, phone, password, userType });
   };
 
   const passwordStrength =
     password.length >= 6 ? "strong" : password.length >= 3 ? "medium" : "weak";
 
   return (
-    <div className="min-h-screen w-full lg:grid lg:grid-cols-2">
+     <div className="min-h-screen w-full lg:grid lg:grid-cols-2">
       {/* Left Column: Branding */}
       <div className="hidden lg:flex flex-col items-center justify-center bg-gradient-to-br from-teal-500 to-cyan-600 p-8 text-white">
         <div className="w-full max-w-md text-center">
@@ -139,6 +146,23 @@ export default function SignUpPage() {
                 />
               </div>
 
+              {/* User Type */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                  I am a...
+                </label>
+                <select
+                  id="userType"
+                  value={userType}
+                  onChange={(e) => setUserType(e.target.value)}
+                  className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  required
+                >
+                  <option value="mentee">Mentee</option>
+                  <option value="mentor">Mentor</option>
+                </select>
+              </div>
+
               {/* Password */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
@@ -206,6 +230,11 @@ export default function SignUpPage() {
                 {formError ||
                   mutation.error?.message ||
                   "An unknown error occurred"}
+              </div>
+            )}
+            {successMessage && (
+              <div className="rounded-lg bg-green-50 dark:bg-green-900/20 p-3 text-sm text-green-600 dark:text-green-400">
+                {successMessage}
               </div>
             )}
 

@@ -18,6 +18,10 @@ export function KeycloakProvider({ children }) {
     setKeycloak(keycloakInstance);
   }, []);
 
+  if (!keycloak) {
+      // Render fallback UI or null while loading Keycloak client
+      return <div>Loading authentication...</div>; 
+    }
   if (typeof window === "undefined" || !keycloak) {
     return children;
   }

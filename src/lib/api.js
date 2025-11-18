@@ -2,7 +2,7 @@ import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_SPRING_API_BASE_URL || "http://localhost:8000",
+  baseURL: process.env.NEXT_SPRING_API_BASE_URL || "http://localhost:8086",
   withCredentials: true,
 });
 
@@ -10,6 +10,9 @@ api.interceptors.request.use((config) => {
   const auth = useAuth();
   //   const token = auth.getToken();
   //   console.log("API Interceptor Token:", token);
+  if (config.url && config.url.includes("/auth/register")) {
+    return config;
+  }
   const token = localStorage.getItem("access_token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
   //   const token = localStorage.getItem("token");

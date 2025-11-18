@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import useAuth from "@/utils/useAuth";
 import { Eye, EyeOff } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
@@ -8,6 +8,7 @@ import { loginUser } from "@/services/userServices.js";
 import { useAuth } from "../../../hooks/useAuth";
 import { ProtectedRoute } from "../../../components/auth/ProtectedRoute";
 import "../../global.css";
+import api from "../../../lib/api";
 
 // import { useRouter } from "next/navigation";
 
@@ -22,6 +23,7 @@ export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { callApi } = api();
 
   const mutation = useMutation({
     mutationFn: () => loginUser(email, password),
@@ -32,6 +34,21 @@ export default function SignInPage() {
     },
     onError: () => alert("Login failed. Check your credentials."),
   });
+
+  
+  // useEffect(() => {
+  //   if (auth.isAuthenticated) {
+  //     (async () => {
+  //       try {
+  //         const userData = await callApi("post", "/auth/login");
+  //         console.log("User data from backend:", userData);
+  //         // Handle after login success, e.g., redirect
+  //       } catch (error) {
+  //         console.error("API error:", error);
+  //       }
+  //     })();
+  //   }
+  // }, [auth.isAuthenticated]);
 
   //   const { signInWithCredentials } = useAuth();
   const handleCredentialsSubmit = async (e) => {

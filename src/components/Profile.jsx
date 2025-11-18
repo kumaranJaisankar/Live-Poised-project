@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Edit3,
   Heart,
@@ -17,32 +17,53 @@ import {
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
-import { getUserById } from "../services/userServices";
+import { getUserById, getUserByName } from "../services/userServices";
+
 
 const Profile = () => {
+  console.log("Profile component rendered");
+
   const auth = useAuth();
   const userDetails = auth.user;
   const [activeTab, setActiveTab] = useState("overview");
+  console.log("Preferred username:", userDetails?.preferred_username);
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["user", "userId"],
-    queryFn: () => getUserById("userId"),
+  const { data, isLoading, isError, error, refetch } = useQuery({
+    queryKey: ["user", userDetails?.preferred_username],
+    queryFn: () => getUserByName(userDetails?.preferred_username),
+    enabled: !!userDetails?.preferred_username,
+    staleTime: 0,
+    cacheTime: 0,
   });
-
+  useEffect(() => {
+    if (userDetails?.preferred_username) {
+      refetch();
+    }
+  }, [userDetails?.preferred_username]);
   console.log("User Profile Data:", data);
+  console.log("User Details:", userDetails);
   console.log("error:", error);
+  console.log("About Me:", data?.userProfile?.aboutMe);
+  function formatMonthYear(isoDateStr) {
+    const date = new Date(isoDateStr);
+    return date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+  }
+
+  // Example
+  const formattedDate = formatMonthYear(data?.loginDetails?.lastLoggedInAt || data?.lastLoggedInAt || "January 2023");
+  console.log(formattedDate); 
 
   const profileData = {
     name: userDetails ? userDetails?.name : "Sarah Johnson",
-    role: "mentor",
+    role: data?.userProfile?.userType || "user",
     avatar:
       "https://images.pexels.com/photos/33081680/pexels-photo-33081680.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&dpr=1",
-    joinDate: "January 2023",
-    location: "San Francisco, CA",
+    joinDate: formattedDate || "January 2023",
+    location: data?.userProfile?.country || "San Francisco, CA",
     email: userDetails ? userDetails.email : "sarah.johnson@healconnect.com",
-    phone: "+1 (555) 123-4567",
+    phone: userDetails ? userDetails.mobileNumber : "+1 (555) 123-4567",
     specialty: "Cancer Recovery & Mental Health",
-    bio: "I'm a cancer survivor who completed treatment 3 years ago. After going through the challenges of chemotherapy and recovery, I'm passionate about helping others navigate their own healing journey. I believe in the power of community and peer support.",
+    bio: data?.userProfile?.aboutMe || "I'm a cancer survivor who completed treatment 3 years ago. After going through the challenges of chemotherapy and recovery, I'm passionate about helping others navigate their own healing journey. I believe in the power of community and peer support.",
     recoveryStory:
       "My journey began in 2020 when I was diagnosed with breast cancer. The initial shock and fear were overwhelming, but with the support of amazing mentors and a strong medical team, I learned to find strength I didn't know I had. Through 6 months of chemotherapy and surgery, I discovered the importance of mental health support alongside medical treatment. Today, I'm 3 years cancer-free and dedicated to helping others find hope during their darkest moments.",
     experience: "3 years cancer-free",
@@ -383,7 +404,7 @@ const Profile = () => {
                 </h1>
                 <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
                   <span className="px-3 py-1 bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 rounded-full text-sm font-medium">
-                    {profileData.role === "mentor" ? "Mentor" : "Mentee"}
+                    {profileData.role === "Mentor" ? "Mentor" : "Mentee"}
                   </span>
                   <span className="text-gray-600 dark:text-gray-300">
                     {profileData.specialty}

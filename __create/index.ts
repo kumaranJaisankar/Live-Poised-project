@@ -76,6 +76,7 @@ if (process.env.AUTH_SECRET) {
   app.use(
     '*',
     initAuthConfig((c) => ({
+      basePath: "/api/auth",
       secret: c.env.AUTH_SECRET,
       pages: {
         signIn: '/account/signin',

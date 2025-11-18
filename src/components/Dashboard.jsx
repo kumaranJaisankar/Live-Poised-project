@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useAuth } from "../hooks/useAuth";
+
 import {
   MessageCircle,
   Plus,
@@ -133,7 +135,8 @@ const Dashboard = ({ onPageChange }) => {
       unread: false,
     },
   ];
-
+  const auth = useAuth();
+  const userDetails = auth.user;
   const filterTabs = [
     { id: "all", label: "All Posts" },
     { id: "mentor", label: "Mentor Only" },
@@ -151,7 +154,7 @@ const Dashboard = ({ onPageChange }) => {
             {/* Welcome Section */}
             <div className="mb-6">
               <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
-                Welcome back, Kumara!
+                Welcome back, {userDetails ? userDetails?.name : "Sarah Johnson"}!
               </h1>
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 Here's your summary for today.

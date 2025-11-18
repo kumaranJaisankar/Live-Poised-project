@@ -8,21 +8,27 @@ import Profile from "../components/Profile";
 import CreatePost from "../components/CreatePost";
 import useThemeStore from "../utils/themeStore";
 import { ProtectedRoute } from "../components/auth/ProtectedRoute";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { loginUser } from "../services/userServices";
+import { useKeycloak } from '@react-keycloak/web';
+import { useAuth } from "../hooks/useAuth";
 
 export default function HealConnectApp() {
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showCreatePost, setShowCreatePost] = useState(false);
   const { theme, sidebarCollapsed } = useThemeStore();
+  const { keycloak, initialized } = useKeycloak();
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["user", "userId"],
-    queryFn: () => loginUser("email", "passwork"),
+  const email = initialized && keycloak.authenticated? keycloak.tokenParsed.email : null;
+
+  const { logindata, isLoading, isError, error } = useQuery({
+    queryKey: ["user", email],
+    queryFn: () => loginUser(email),
+    enabled: !!email,
   });
 
-  console.log("User Profile Data:", data);
+  console.log("User Login Data:", logindata);
   // console.log("User Profile Data:", error);
   // if (isLoading) return <p>Loading profile...</p>;
   // if (isError) return <p>Failed to load user profile</p>;
@@ -45,7 +51,6 @@ export default function HealConnectApp() {
       setMobileMenuOpen(false);
     }
   };
-
   const renderCurrentPage = () => {
     switch (currentPage) {
       case "dashboard":
