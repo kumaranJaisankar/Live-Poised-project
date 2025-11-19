@@ -11,6 +11,7 @@ export default function SignUpPage() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [userType, setUserType] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -32,7 +33,14 @@ export default function SignUpPage() {
     setFormError(null);
 
     // Front-end validation
-    if (!name || !email || !phone || !password || !confirmPassword) {
+    if (
+      !name ||
+      !email ||
+      !phone ||
+      !password ||
+      !userType ||
+      !confirmPassword
+    ) {
       setFormError("Please fill in all fields");
       return;
     }
@@ -46,7 +54,7 @@ export default function SignUpPage() {
     }
 
     // Execute the mutation
-    mutation.mutate({ name, email, phone, password });
+    mutation.mutate({ name, email, phone, password, userType });
   };
 
   const passwordStrength =
@@ -137,6 +145,23 @@ export default function SignUpPage() {
                   placeholder="+1 555-123-4567"
                   className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
+              </div>
+
+              {/* User Type */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                  I am a...
+                </label>
+                <select
+                  id="userType"
+                  value={userType}
+                  onChange={(e) => setUserType(e.target.value)}
+                  className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  required
+                >
+                  <option value="mentee">Mentee</option>
+                  <option value="mentor">Mentor</option>
+                </select>
               </div>
 
               {/* Password */}

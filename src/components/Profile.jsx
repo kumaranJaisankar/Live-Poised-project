@@ -18,11 +18,13 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { getUserById } from "../services/userServices";
+import { set } from "date-fns";
 
 const Profile = () => {
   const auth = useAuth();
   const userDetails = auth.user;
   const [activeTab, setActiveTab] = useState("overview");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["user", "userId"],
@@ -356,103 +358,108 @@ const Profile = () => {
   );
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      {/* Profile Header */}
-      <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-8 mb-8">
-        <div className="flex flex-col md:flex-row gap-6">
-          {/* Avatar Section */}
-          <div className="flex flex-col items-center md:items-start">
-            <div className="relative group">
-              <img
-                src={profileData.avatar}
-                alt={profileData.name}
-                className="w-32 h-32 rounded-full object-cover border-4 border-teal-200 dark:border-teal-700"
-              />
-              <button className="absolute bottom-2 right-2 w-10 h-10 bg-teal-500 hover:bg-teal-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200">
-                <Camera size={16} />
-              </button>
+    <>
+      <div className="p-6 max-w-4xl mx-auto">
+        {/* Profile Header */}
+        <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-8 mb-8">
+          <div className="flex flex-col md:flex-row gap-6">
+            {/* Avatar Section */}
+            <div className="flex flex-col items-center md:items-start">
+              <div className="relative group">
+                <img
+                  src={profileData.avatar}
+                  alt={profileData.name}
+                  className="w-32 h-32 rounded-full object-cover border-4 border-teal-200 dark:border-teal-700"
+                />
+                <button className="absolute bottom-2 right-2 w-10 h-10 bg-teal-500 hover:bg-teal-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200">
+                  <Camera size={16} />
+                </button>
+              </div>
             </div>
-          </div>
 
-          {/* Profile Info */}
-          <div className="flex-1 text-center md:text-left">
-            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                  {profileData.name}
-                </h1>
-                <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
-                  <span className="px-3 py-1 bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 rounded-full text-sm font-medium">
-                    {profileData.role === "mentor" ? "Mentor" : "Mentee"}
-                  </span>
-                  <span className="text-gray-600 dark:text-gray-300">
-                    {profileData.specialty}
-                  </span>
+            {/* Profile Info */}
+            <div className="flex-1 text-center md:text-left">
+              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                <div>
+                  <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                    {profileData.name}
+                  </h1>
+                  <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
+                    <span className="px-3 py-1 bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 rounded-full text-sm font-medium">
+                      {profileData.role === "mentor" ? "Mentor" : "Mentee"}
+                    </span>
+                    <span className="text-gray-600 dark:text-gray-300">
+                      {profileData.specialty}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setIsDialogOpen(!isDialogOpen)}
+                    className="px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
+                  >
+                    <Edit3 size={16} />
+                    Edit Profile
+                  </button>
+                  <button className="p-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-lg transition-all duration-200">
+                    <Settings size={16} />
+                  </button>
                 </div>
               </div>
-              <div className="flex gap-2">
-                <button className="px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg font-medium transition-all duration-200 flex items-center gap-2">
-                  <Edit3 size={16} />
-                  Edit Profile
-                </button>
-                <button className="p-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-lg transition-all duration-200">
-                  <Settings size={16} />
-                </button>
-              </div>
-            </div>
 
-            {/* Contact Info */}
-            <div className="flex flex-wrap justify-center md:justify-start gap-4 text-sm text-gray-600 dark:text-gray-300">
-              <div className="flex items-center gap-2">
-                <MapPin size={16} />
-                <span>{profileData.location}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Calendar size={16} />
-                <span>Joined {profileData.joinDate}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail size={16} />
-                <span>{profileData.email}</span>
+              {/* Contact Info */}
+              <div className="flex flex-wrap justify-center md:justify-start gap-4 text-sm text-gray-600 dark:text-gray-300">
+                <div className="flex items-center gap-2">
+                  <MapPin size={16} />
+                  <span>{profileData.location}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Calendar size={16} />
+                  <span>Joined {profileData.joinDate}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Mail size={16} />
+                  <span>{profileData.email}</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Tabs */}
-      <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl overflow-hidden">
-        <div className="border-b border-gray-200 dark:border-gray-700">
-          <nav className="flex">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-6 py-4 text-sm font-medium transition-all duration-200 ${
-                    activeTab === tab.id
-                      ? "text-teal-600 dark:text-teal-400 border-b-2 border-teal-500"
-                      : "text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400"
-                  }`}
-                >
-                  <Icon size={18} />
-                  {tab.label}
-                </button>
-              );
-            })}
-          </nav>
-        </div>
+        {/* Tabs */}
+        <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl overflow-hidden">
+          <div className="border-b border-gray-200 dark:border-gray-700">
+            <nav className="flex">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-2 px-6 py-4 text-sm font-medium transition-all duration-200 ${
+                      activeTab === tab.id
+                        ? "text-teal-600 dark:text-teal-400 border-b-2 border-teal-500"
+                        : "text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400"
+                    }`}
+                  >
+                    <Icon size={18} />
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
 
-        {/* Tab Content */}
-        <div className="p-6">
-          {activeTab === "overview" && renderOverview()}
-          {activeTab === "story" && renderStory()}
-          {activeTab === "contributions" && renderContributions()}
-          {activeTab === "sessions" && renderSessions()}
+          {/* Tab Content */}
+          <div className="p-6">
+            {activeTab === "overview" && renderOverview()}
+            {activeTab === "story" && renderStory()}
+            {activeTab === "contributions" && renderContributions()}
+            {activeTab === "sessions" && renderSessions()}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

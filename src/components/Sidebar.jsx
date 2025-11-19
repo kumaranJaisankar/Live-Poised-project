@@ -101,36 +101,6 @@ const Sidebar = ({ currentPage, onPageChange }) => {
           </div>
         </div>
       )}
-      {/* {isAuthenticated && auth.user && (
-        <div
-          className="p-4 border-b border-teal-100 dark:border-gray-800 cursor-pointer"
-          onClick={() => onPageChange("profile")}
-        >
-          <div className="flex flex-col items-center justify-center ">
-            <img
-              src={
-                "https://images.pexels.com/photos/33081680/pexels-photo-33081680.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&dpr=1"
-              }
-              alt={auth.user.name}
-              className="w-24 h-24 rounded-full object-cover border-4 border-teal-200 dark:border-teal-700"
-            />
-            {!sidebarCollapsed && (
-              <div className="min-w-0 text-center mt-2">
-                <p className="font-semibold text-gray-900 dark:text-white truncate">
-                  {auth.user.name}{" "}
-                  <span
-                    className={
-                      "text-xs px-2 py-1 rounded-full mt-2 inline-block bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
-                    }
-                  >
-                    Mentor
-                  </span>
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      )} */}
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-2">
         {navigationItems.map((item) => {

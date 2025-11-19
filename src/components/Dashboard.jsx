@@ -185,7 +185,6 @@ const Dashboard = ({ onPageChange }) => {
                 color="purple"
               />
             </div>
-
             {/* My Mentees */}
             <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm">
               <div className="flex items-center justify-between mb-3">
@@ -222,7 +221,6 @@ const Dashboard = ({ onPageChange }) => {
                 ))}
               </div>
             </div>
-
             {/* Recent Forum Posts */}
             <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm">
               <div className="flex items-center justify-between mb-3">
@@ -237,7 +235,6 @@ const Dashboard = ({ onPageChange }) => {
                   Create Post
                 </button>
               </div>
-
               {/* Filter Tabs */}
               <div className="flex border-b border-gray-200 dark:border-gray-700 mb-3">
                 {filterTabs.map((tab) => (
@@ -254,7 +251,6 @@ const Dashboard = ({ onPageChange }) => {
                   </button>
                 ))}
               </div>
-
               <div className="space-y-3">
                 {recentForumPosts.map((post) => (
                   <div
@@ -295,7 +291,6 @@ const Dashboard = ({ onPageChange }) => {
               </div>
             </div>
           </div>
-
           {/* Right Column */}
           <div className="space-y-6">
             {/* Quick Actions */}
@@ -312,9 +307,7 @@ const Dashboard = ({ onPageChange }) => {
                 <QuickActionButton icon={Calendar} text="Schedule Session" />
               </div>
             </div>
-
             <NewsFeed />
-
             {/* Progress Tracker */}
             <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm">
               <div className="flex items-center gap-3 mb-3">
