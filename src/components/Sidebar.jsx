@@ -35,10 +35,10 @@ const Sidebar = ({ currentPage, onPageChange }) => {
   });
 
   useEffect(() => {
-      if (userDetails?.preferred_username) {
-        refetch();
-      }
-    }, [userDetails?.preferred_username]);
+    if (userDetails?.preferred_username) {
+      refetch();
+    }
+  }, [userDetails?.preferred_username]);
   const navigationItems = [
     { id: "dashboard", icon: Home, label: "Dashboard" },
     { id: "forum", icon: MessageSquare, label: "Forum" },
@@ -48,20 +48,23 @@ const Sidebar = ({ currentPage, onPageChange }) => {
     // { id: "settings", icon: Settings, label: "Settings" },
   ];
 
-
   function formatDateTimeMMDDYYYY(isoDateStr) {
     const date = new Date(isoDateStr);
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
+    const day = String(date.getDate()).padStart(2, "0");
     const year = date.getFullYear();
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
 
     return `${month}-${day}-${year} ${hours}:${minutes}:${seconds}`;
   }
 
-  const formattedDate = formatDateTimeMMDDYYYY(data?.loginDetails?.lastLoggedInAt || data?.lastLoggedInAt || "2025-06-10T10:00:00");
+  const formattedDate = formatDateTimeMMDDYYYY(
+    data?.loginDetails?.lastLoggedInAt ||
+      data?.lastLoggedInAt ||
+      "2025-06-10T10:00:00"
+  );
 
   console.log("Formatted Login Date:", formattedDate);
   console.log("User Profile Data from side bar component:", data);
@@ -101,6 +104,20 @@ const Sidebar = ({ currentPage, onPageChange }) => {
           )}
         </div>
       </div>
+      <div
+        className="p-4 border-b border-teal-100 dark:border-gray-800 cursor-pointer"
+        onClick={() => onPageChange("profile")}
+      >
+        <div className="flex items-center gap-3">
+          <img
+            src={
+              "https://images.pexels.com/photos/33081680/pexels-photo-33081680.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&dpr=1"
+            }
+            alt={"auth.user.name"}
+            className="w-16 h-16 rounded-full object-cover border-4 border-teal-200 dark:border-teal-700"
+          />
+        </div>
+      </div>
       {/* User Avatar */}
       {isAuthenticated && auth.user && (
         <div
@@ -125,8 +142,7 @@ const Sidebar = ({ currentPage, onPageChange }) => {
                 </p>
 
                 <p className="text-[10px] text-gray-500 dark:text-gray-400 truncate">
-                  
-                  Last Login: { formattedDate || "2025-06-10 10:00 AM"}
+                  Last Login: {formattedDate || "2025-06-10 10:00 AM"}
                 </p>
               </div>
             )}

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Edit3,
   Heart,
@@ -18,7 +18,7 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { getUserById, getUserByName } from "../services/userServices";
-
+import EditProfileDialog from "./EditProfileDialog";
 
 const Profile = () => {
   console.log("Profile component rendered");
@@ -26,6 +26,8 @@ const Profile = () => {
   const auth = useAuth();
   const userDetails = auth.user;
   const [activeTab, setActiveTab] = useState("overview");
+  const [isEditDialogOpen, setEditDialogOpen] = useState(false);
+
   console.log("Preferred username:", userDetails?.preferred_username);
 
   const { data, isLoading, isError, error, refetch } = useQuery({
@@ -46,12 +48,14 @@ const Profile = () => {
   console.log("About Me:", data?.userProfile?.aboutMe);
   function formatMonthYear(isoDateStr) {
     const date = new Date(isoDateStr);
-    return date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+    return date.toLocaleString("en-US", { month: "long", year: "numeric" });
   }
 
   // Example
-  const formattedDate = formatMonthYear(data?.loginDetails?.lastLoggedInAt || data?.lastLoggedInAt || "January 2023");
-  console.log(formattedDate); 
+  const formattedDate = formatMonthYear(
+    data?.loginDetails?.lastLoggedInAt || data?.lastLoggedInAt || "January 2023"
+  );
+  console.log(formattedDate);
 
   const profileData = {
     name: userDetails ? userDetails?.name : "Sarah Johnson",
@@ -63,7 +67,9 @@ const Profile = () => {
     email: userDetails ? userDetails.email : "sarah.johnson@healconnect.com",
     phone: userDetails ? userDetails.mobileNumber : "+1 (555) 123-4567",
     specialty: "Cancer Recovery & Mental Health",
-    bio: data?.userProfile?.aboutMe || "I'm a cancer survivor who completed treatment 3 years ago. After going through the challenges of chemotherapy and recovery, I'm passionate about helping others navigate their own healing journey. I believe in the power of community and peer support.",
+    bio:
+      data?.userProfile?.aboutMe ||
+      "I'm a cancer survivor who completed treatment 3 years ago. After going through the challenges of chemotherapy and recovery, I'm passionate about helping others navigate their own healing journey. I believe in the power of community and peer support.",
     recoveryStory:
       "My journey began in 2020 when I was diagnosed with breast cancer. The initial shock and fear were overwhelming, but with the support of amazing mentors and a strong medical team, I learned to find strength I didn't know I had. Through 6 months of chemotherapy and surgery, I discovered the importance of mental health support alongside medical treatment. Today, I'm 3 years cancer-free and dedicated to helping others find hope during their darkest moments.",
     experience: "3 years cancer-free",
@@ -412,7 +418,10 @@ const Profile = () => {
                 </div>
               </div>
               <div className="flex gap-2">
-                <button className="px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg font-medium transition-all duration-200 flex items-center gap-2">
+                <button
+                  onClick={() => setEditDialogOpen(true)}
+                  className="px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
+                >
                   <Edit3 size={16} />
                   Edit Profile
                 </button>
@@ -473,6 +482,12 @@ const Profile = () => {
           {activeTab === "sessions" && renderSessions()}
         </div>
       </div>
+      {isEditDialogOpen && (
+        <EditProfileDialog
+          user={data}
+          onClose={() => setEditDialogOpen(false)}
+        />
+      )}
     </div>
   );
 };
