@@ -104,20 +104,7 @@ const Sidebar = ({ currentPage, onPageChange }) => {
           )}
         </div>
       </div>
-      <div
-        className="p-4 border-b border-teal-100 dark:border-gray-800 cursor-pointer"
-        onClick={() => onPageChange("profile")}
-      >
-        <div className="flex items-center gap-3">
-          <img
-            src={
-              "https://images.pexels.com/photos/33081680/pexels-photo-33081680.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&dpr=1"
-            }
-            alt={"auth.user.name"}
-            className="w-16 h-16 rounded-full object-cover border-4 border-teal-200 dark:border-teal-700"
-          />
-        </div>
-      </div>
+
       {/* User Avatar */}
       {isAuthenticated && auth.user && (
         <div

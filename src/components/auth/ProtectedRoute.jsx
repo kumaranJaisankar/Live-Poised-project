@@ -25,13 +25,13 @@ export function ProtectedRoute({ children }) {
     }
   }, [isAuthenticated, isLoading, navigate, path.pathname]);
 
-  // if (isLoading) {
-  //   return (
-  //     <div className="fixed inset-0 flex items-center justify-center bg-white dark:bg-slate-950">
-  //       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-  //     </div>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white dark:bg-slate-950">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
   //   if (!isAuthenticated) {
   //     return null;
   //   }
