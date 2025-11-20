@@ -19,6 +19,7 @@ import useThemeStore from "../utils/themeStore";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
+import { getUserById, getUserByName } from "../services/userServices";
 
 const Sidebar = ({ currentPage, onPageChange }) => {
   const { sidebarCollapsed, toggleSidebar } = useThemeStore();
