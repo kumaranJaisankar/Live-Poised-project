@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import {
   Edit3,
@@ -28,8 +29,6 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [isEditDialogOpen, setEditDialogOpen] = useState(false);
 
-  console.log("Preferred username:", userDetails?.preferred_username);
-
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["user", userDetails?.preferred_username],
     queryFn: () => getUserByName(userDetails?.preferred_username),
@@ -37,15 +36,16 @@ const Profile = () => {
     staleTime: 0,
     cacheTime: 0,
   });
+
+  const onCloseEditProfile = () => {
+    setEditDialogOpen(false);
+    refetch();
+  };
   useEffect(() => {
     if (userDetails?.preferred_username) {
       refetch();
     }
   }, [userDetails?.preferred_username]);
-  console.log("User Profile Data:", data);
-  console.log("User Details:", userDetails);
-  console.log("error:", error);
-  console.log("About Me:", data?.userProfile?.aboutMe);
   function formatMonthYear(isoDateStr) {
     const date = new Date(isoDateStr);
     return date.toLocaleString("en-US", { month: "long", year: "numeric" });
@@ -56,6 +56,11 @@ const Profile = () => {
     data?.loginDetails?.lastLoggedInAt || data?.lastLoggedInAt || "January 2023"
   );
   console.log(formattedDate);
+  const city = data?.address?.city;
+  const state = data?.address?.state;
+  const country = data?.userProfile?.country || "San Francisco, CA";
+
+  const location = city && state ? `${city}, ${state}` : country;
 
   const profileData = {
     name: userDetails ? userDetails?.name : "Sarah Johnson",
@@ -63,7 +68,7 @@ const Profile = () => {
     avatar:
       "https://images.pexels.com/photos/33081680/pexels-photo-33081680.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&dpr=1",
     joinDate: formattedDate || "January 2023",
-    location: data?.userProfile?.country || "San Francisco, CA",
+    location: location || "San Francisco, CA",
     email: userDetails ? userDetails.email : "sarah.johnson@healconnect.com",
     phone: userDetails ? userDetails.mobileNumber : "+1 (555) 123-4567",
     specialty: "Cancer Recovery & Mental Health",
@@ -71,6 +76,7 @@ const Profile = () => {
       data?.userProfile?.aboutMe ||
       "I'm a cancer survivor who completed treatment 3 years ago. After going through the challenges of chemotherapy and recovery, I'm passionate about helping others navigate their own healing journey. I believe in the power of community and peer support.",
     recoveryStory:
+      data?.personalDetails?.personalStory ||
       "My journey began in 2020 when I was diagnosed with breast cancer. The initial shock and fear were overwhelming, but with the support of amazing mentors and a strong medical team, I learned to find strength I didn't know I had. Through 6 months of chemotherapy and surgery, I discovered the importance of mental health support alongside medical treatment. Today, I'm 3 years cancer-free and dedicated to helping others find hope during their darkest moments.",
     experience: "3 years cancer-free",
     mentees: 12,
@@ -483,10 +489,7 @@ const Profile = () => {
         </div>
       </div>
       {isEditDialogOpen && (
-        <EditProfileDialog
-          user={data}
-          onClose={() => setEditDialogOpen(false)}
-        />
+        <EditProfileDialog user={data} onClose={onCloseEditProfile} />
       )}
     </div>
   );

@@ -39,7 +39,14 @@ export default function SignUpPage() {
     setFormError(null);
 
     // Front-end validation
-    if (!name || !email || !phone || !password || !confirmPassword || !userType) {
+    if (
+      !name ||
+      !email ||
+      !phone ||
+      !password ||
+      !confirmPassword ||
+      !userType
+    ) {
       setFormError("Please fill in all fields");
       return;
     }
@@ -60,7 +67,7 @@ export default function SignUpPage() {
     password.length >= 6 ? "strong" : password.length >= 3 ? "medium" : "weak";
 
   return (
-     <div className="min-h-screen w-full lg:grid lg:grid-cols-2">
+    <div className="min-h-screen w-full lg:grid lg:grid-cols-2">
       {/* Left Column: Branding */}
       <div className="hidden lg:flex flex-col items-center justify-center bg-gradient-to-br from-teal-500 to-cyan-600 p-8 text-white">
         <div className="w-full max-w-md text-center">
@@ -158,8 +165,8 @@ export default function SignUpPage() {
                   className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                   required
                 >
-                  <option value="mentee">Mentee</option>
-                  <option value="mentor">Mentor</option>
+                  <option value="Mentee">Mentee</option>
+                  <option value="Mentor">Mentor</option>
                 </select>
               </div>
 

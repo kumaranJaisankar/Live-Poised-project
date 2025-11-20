@@ -9,9 +9,10 @@ import CreatePost from "../components/CreatePost";
 import useThemeStore from "../utils/themeStore";
 import { ProtectedRoute } from "../components/auth/ProtectedRoute";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { loginUser } from "../services/userServices";
-import { useKeycloak } from '@react-keycloak/web';
+import { getUserByName, loginUser } from "../services/userServices";
+import { useKeycloak } from "@react-keycloak/web";
 import { useAuth } from "../hooks/useAuth";
+import MenteeDashboardPage from "../components/MenteeDashboard";
 
 export default function HealConnectApp() {
   const [currentPage, setCurrentPage] = useState("dashboard");
@@ -20,7 +21,8 @@ export default function HealConnectApp() {
   const { theme, sidebarCollapsed } = useThemeStore();
   const { keycloak, initialized } = useKeycloak();
 
-  const email = initialized && keycloak.authenticated? keycloak.tokenParsed.email : null;
+  const email =
+    initialized && keycloak.authenticated ? keycloak.tokenParsed.email : null;
 
   const { logindata, isLoading, isError, error } = useQuery({
     queryKey: ["user", email],
@@ -33,15 +35,19 @@ export default function HealConnectApp() {
   // if (isLoading) return <p>Loading profile...</p>;
   // if (isError) return <p>Failed to load user profile</p>;
 
-  // Initialize theme on component mount
+  const auth = useAuth();
+  const userDetails = auth.user;
+
+  const { data, refetch } = useQuery({
+    queryKey: ["user", userDetails?.preferred_username],
+    queryFn: () => getUserByName(userDetails?.preferred_username),
+  });
+
   useEffect(() => {
-    // loginUser("email", "password");
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
+    if (userDetails?.preferred_username) {
+      refetch();
     }
-  }, [theme]);
+  }, [userDetails?.preferred_username]);
 
   const handlePageChange = (page) => {
     if (page === "create-post") {
@@ -54,7 +60,12 @@ export default function HealConnectApp() {
   const renderCurrentPage = () => {
     switch (currentPage) {
       case "dashboard":
-        return <Dashboard onPageChange={handlePageChange} />;
+        return data?.userProfile?.userType === "Mentor" ||
+          data?.userType === "Mentor" ? (
+          <Dashboard onPageChange={handlePageChange} />
+        ) : (
+          <MenteeDashboardPage />
+        );
       case "forum":
         return <Forum onPageChange={handlePageChange} />;
       case "chat":
